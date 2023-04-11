@@ -1,0 +1,28 @@
+{
+  "name": "c9e94bbb",
+  "version": "1.0.0",
+  "main": "./src/index.js",
+  "license": "none",
+  "private": true,
+  "scripts": {
+    "watch": "set NODE_OPTIONS=--openssl-legacy-provider && nodemon -w src -e js,jsx,json,css -w webpack.config.js -x yarn build",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider && webpack --mode development",
+    "build2": "webpack --mode development"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.21.0",
+    "@babel/core": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
+    "babel-loader": "^8.1.0",
+    "css-loader": "5.2.6",
+    "nodemon": "^2.0.22",
+    "sass-loader": "10.1.1",
+    "style-loader": "2.0.0",
+    "webpack": "^4.16.4",
+    "webpack-cli": "^3.1.0"
+  },
+  "dependencies": {
+    "openai": "^3.2.1",
+    "yarn": "^1.12.3"
+  }
+}
