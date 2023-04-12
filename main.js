@@ -4908,7 +4908,9 @@ var _require2 = __webpack_require__(/*! scenegraph */ "scenegraph"),
 var fs = __webpack_require__(/*! uxp */ "uxp").storage.localFileSystem;
 var panel;
 var fileName = 'XD_PlUGIN_WEBSQUARE.xml';
-var defaultPrompt = '과일 열매 차이를 알려줘';
+var defaultPrompt = "\n\uB2F9\uC2E0\uC740 \uD504\uB860\uD2B8\uC5D4\uB4DC \uD504\uB85C\uADF8\uB798\uBA38\uC785\uB2C8\uB2E4.\n\uC6F9\uC2A4\uD018\uC5B4 xml\uC740 xforms \uD45C\uC900\uC744 \uD655\uC7A5\uD558\uC5EC \uB9CC\uB4E4\uC5B4\uC9C4 xml\uC785\uB2C8\uB2E4.\n\uADDC\uCE59\uC740 \uB2E4\uC74C\uACFC \uAC19\uC2B5\uB2C8\uB2E4.\n\uB2F9\uC2E0\uC740 html \uD398\uC774\uC9C0\uB97C \uC6F9\uC2A4\uD018\uC5B4 xml\uB85C \uC804\uD658\uD558\uB294 \uC791\uC5C5 \uC218\uD589\uD558\uC5EC\uC57C \uD569\uB2C8\uB2E4.\n\n* <ul>\uB294 <xf:group>\uC73C\uB85C \uBCC0\uD658\uD558\uACE0, tagname \uC18D\uC131\uC5D0  ul\uC744 \uCD94\uAC00\n* <li>\uB294 <xf:group>\uC73C\uB85C \uBCC0\uD658\uD558\uACE0, tagname \uC18D\uC131\uC5D0  li\uC744 \uCD94\uAC00\n* <div>\uB294 <xf:group>\uB85C \uBCC0\uD658\n* <span>\uC740 <w2:span>\uB85C \uBCC0\uD658\n* <svg>\uC740  <xf:image>\uB85C \uBCC0\uD658\n* <svg> \uC18D\uC131 \uC911  viewBox\uC18D\uC131\uC740 \uC0AD\uC81C \n* viewBox\uC758 4\uC790\uB9AC \uC22B\uC790\uC911\uC5D0 \uB4A4\uC5D0 2 \uC22B\uC790\uB97C \uC368\uC11C, inline style \uC981  width,height \uAC12\uC73C\uB85C \uC815\uC758\uD558\uBA70 \uB2E8\uC704\uB294 px\uB85C \uC9C0\uC815.\n* <svg>  \uD558\uC704\uC758  <path> \uAC00 \uC788\uC744 \uACBD\uC6B0\uC5D0\uB294 \uC0AD\uC81C \n*  id\uC640 class \uC18D\uC131\uC5D0 'n_\"\uB85C \uC2DC\uC791\uD558\uB294 \uACBD\uC6B0, \uBAA8\uB450 \uBE48 \uAC12\uC73C\uB85C \uC124\uC815\n*  srcset \uC18D\uC131\uBA85\uC740 src\uB85C \uBCC0\uACBD \n\n\uC18C\uC2A4\uB294 \uB2E4\uC74C\uACFC \uAC19\uC2B5\uB2C8\uB2E4.\n";
+var applyPrompt = '';
+var systemPrompt = '';
 
 // 네모 생성 테스트
 function rectangleHandlerFunction(selection) {
@@ -4924,38 +4926,50 @@ function rectangleHandlerFunction(selection) {
 }
 
 // openAi test
-function testOpenAi() {
+function testOpenAi(_x) {
   return _testOpenAi.apply(this, arguments);
 } // 파일 읽기 테스트
 function _testOpenAi() {
-  _testOpenAi = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-    var configuration, openai, response;
+  _testOpenAi = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(prompt) {
+    var configuration, openai, message, response;
     return _regeneratorRuntime().wrap(function _callee4$(_context4) {
       while (1) switch (_context4.prev = _context4.next) {
         case 0:
           configuration = new Configuration({
             //apiKey: process.env.OPENAI_API_KEY,
-            apiKey: '나의 api key' // 해당 방법으로 사용하는 이유는 환경변수에 설정된 OPENAI_API_KEY를 adobe xd플러그인이 못들고오는 듯 함
+            apiKey: '내 api키' // 해당 방법으로 사용하는 이유는 환경변수에 설정된 OPENAI_API_KEY를 adobe xd플러그인이 못들고오는 듯 함
           });
-          openai = new OpenAIApi(configuration);
-          _context4.next = 4;
-          return openai.createCompletion({
-            // model: 'gpt-3.5-turbo',
-            model: 'text-davinci-003',
-            prompt: '과일 열매 차이를 알려줘',
-            max_tokens: 3000,
-            temperature: 0.6
-          })["catch"](function (e) {
-            console.log('error', e);
-            return 'error : ' + e;
+          openai = new OpenAIApi(configuration); //const response = await openai
+          //  .createCompletion({
+          //    // model: 'gpt-3.5-turbo',
+          //    model: 'text-davinci-003',
+          //    prompt: prompt || applyPrompt,
+          //    max_tokens: 3000,
+          //    temperature: 0.6,
+          //  })
+          //  .catch(function (e) {
+          //    console.log('error', e);
+          //    return 'error : ' + e;
+          //  });
+          message = [{
+            role: 'user',
+            content: prompt || applyPrompt
+          }, {
+            role: 'system',
+            content: systemPrompt
+          }];
+          _context4.next = 5;
+          return openai.createChatCompletion({
+            model: 'gpt-3.5-turbo',
+            messages: message
           });
-        case 4:
+        case 5:
           response = _context4.sent;
-          console.log('- completion:\n' + response.data.choices[0].text);
+          console.log('- completion:\n' + response.data.choices[0].message.content);
           console.log('\n- total tokens: ' + response.data.usage.total_tokens);
           console.log('*- completion ended...');
-          return _context4.abrupt("return", response.data.choices[0].text);
-        case 9:
+          return _context4.abrupt("return", response.data.choices[0].message.content);
+        case 10:
         case "end":
           return _context4.stop();
       }
@@ -4963,7 +4977,7 @@ function _testOpenAi() {
   }));
   return _testOpenAi.apply(this, arguments);
 }
-function insertTextFromFileHandler(_x) {
+function insertTextFromFileHandler(_x2) {
   return _insertTextFromFileHandler.apply(this, arguments);
 }
 function _insertTextFromFileHandler() {
@@ -5001,11 +5015,11 @@ function _insertTextFromFileHandler() {
   }));
   return _insertTextFromFileHandler.apply(this, arguments);
 }
-function exportRendition(_x2) {
+function exportRendition(_x3) {
   return _exportRendition.apply(this, arguments);
 }
 function _exportRendition() {
-  _exportRendition = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(selection) {
+  _exportRendition = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(xmlText) {
     var folder, anotherFile;
     return _regeneratorRuntime().wrap(function _callee6$(_context6) {
       while (1) switch (_context6.prev = _context6.next) {
@@ -5021,12 +5035,12 @@ function _exportRendition() {
           return _context6.abrupt("return", console.log('User canceled folder picker.'));
         case 5:
           _context6.next = 7;
-          return fs.getFileForSaving("hello.txt");
+          return fs.getFileForSaving(fileName);
         case 7:
           anotherFile = _context6.sent;
           // Create a file that will store the rendition
           // const file = await folder.createFile(fileName, { overwrite: true });
-          anotherFile.write("Hello, world!");
+          anotherFile.write(xmlText);
 
           // Create options for rendering a PNG.
           // Other file formats have different required options.
@@ -5060,7 +5074,7 @@ function _exportRendition() {
   return _exportRendition.apply(this, arguments);
 }
 function create() {
-  var HTML = "\n<style>\n  textarea {\n    resize: none; /* resize \uAE30\uB2A5 \uBE44\uD65C\uC131\uD654 */\n    width: 100%; /* \uAC00\uB85C \uD06C\uAE30 */\n    height: 200px; /* \uC138\uB85C \uD06C\uAE30 */\n    padding: 0px;\n    margin: 0px;\n  }\n  .prompt {\n    padding-top: 10px;\n  }\n  .export {\n    padding-top: 10px;\n    padding-bottom: 10px;\n  }\n</style>\n<form method=\"dialog\" id=\"main\">\n  <button id=\"btnOpenFileDialog\" uxp-variant=\"cta\">\uD30C\uC77C \uC5F4\uAE30</button>\n  <div class=\"prompt\">\n    <label>\uD504\uB86C\uD504\uD2B8</label>\n    <textarea id=\"taPrompt\"></textarea>\n  </div>\n  <button id=\"btnConvert\" uxp-variant=\"cta\">ConvertToWebSquare</button>\n  <div class=\"export\">\n    <label>\uACB0\uACFC</label>\n    <textarea id=\"taExport\"></textarea>\n  </div>\n  <button id=\"btnCopyXMLText\" uxp-variant=\"cta\">\uD14D\uC2A4\uD2B8 \uBCF5\uC0AC</button>\n</form>\n";
+  var HTML = "\n<style>\n  textarea {\n    resize: none; /* resize \uAE30\uB2A5 \uBE44\uD65C\uC131\uD654 */\n    width: 100%; /* \uAC00\uB85C \uD06C\uAE30 */\n    height: 200px; /* \uC138\uB85C \uD06C\uAE30 */\n    padding: 0px;\n    margin: 0px;\n  }\n  .prompt {\n    padding-top: 10px;\n  }\n  .export {\n    padding-top: 10px;\n    padding-bottom: 10px;\n  }\n</style>\n<form method=\"dialog\" id=\"main\">\n  <button id=\"btnOpenFileDialog\" uxp-variant=\"cta\">\uD30C\uC77C \uC5F4\uAE30</button>\n  <div class=\"prompt\">\n    <label>\uD504\uB86C\uD504\uD2B8</label>\n    <textarea id=\"taPrompt\"></textarea>\n  </div>\n  <button id=\"btnConvert\" uxp-variant=\"cta\">ConvertToWebSquare</button>\n  <div class=\"export\">\n    <label>\uACB0\uACFC</label>\n    <textarea id=\"taExport\"></textarea>\n  </div>\n  <button id=\"btnCopyXMLText\" uxp-variant=\"cta\">\uD30C\uC77C \uC800\uC7A5</button>\n</form>\n";
   panel = document.createElement('div');
   panel.innerHTML = HTML;
   panel.querySelector('#btnOpenFileDialog').addEventListener('click', /*#__PURE__*/function () {
@@ -5073,28 +5087,27 @@ function create() {
             return insertTextFromFileHandler(e);
           case 2:
             contents = _context.sent;
-            panel.querySelector('#taPrompt').value = contents;
-          case 4:
+            applyPrompt = defaultPrompt + '```\n' + contents + '\n```';
+            panel.querySelector('#taPrompt').value = applyPrompt;
+          case 5:
           case "end":
             return _context.stop();
         }
       }, _callee);
     }));
-    return function (_x3) {
+    return function (_x4) {
       return _ref.apply(this, arguments);
     };
   }());
   panel.querySelector('#btnCopyXMLText').addEventListener('click', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-    var textarea, textToCopy;
+    var textarea;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          // 복사할 텍스트를 가져옴
           textarea = panel.querySelector('#taExport');
-          textToCopy = textarea.value;
-          _context2.next = 4;
-          return exportRendition();
-        case 4:
+          _context2.next = 3;
+          return exportRendition(textarea.value);
+        case 3:
         case "end":
           return _context2.stop();
       }
@@ -5102,23 +5115,25 @@ function create() {
   })));
   panel.querySelector('#btnConvert').addEventListener('click', /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(e) {
-      var contents;
+      var taPrompt, contents;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
-            _context3.next = 2;
-            return testOpenAi();
-          case 2:
+            //panel.querySelector('#btnConvert').disabled();
+            taPrompt = panel.querySelector('#taPrompt');
+            _context3.next = 3;
+            return testOpenAi(taPrompt.value);
+          case 3:
             contents = _context3.sent;
             panel.querySelector('#taExport').value = contents;
             //panel.querySelector('#btnConvert').enabled();
-          case 4:
+          case 5:
           case "end":
             return _context3.stop();
         }
       }, _callee3);
     }));
-    return function (_x4) {
+    return function (_x5) {
       return _ref3.apply(this, arguments);
     };
   }());
