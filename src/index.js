@@ -81,17 +81,17 @@ async function insertTextFromFileHandler(selection) {
 	return bodyHtmlString;
 }
 
-async function exportRendition(selection) {
+async function exportRendition(xmlText) {
 	// Get a folder by showing the user the system folder picker
 	const folder = await fs.getFolder();
 	// Exit if user doesn't select a folder
 	if (!folder) return console.log("User canceled folder picker.");
 
-	const anotherFile = await fs.getFileForSaving("hello.txt");
+	const anotherFile = await fs.getFileForSaving(fileName);
 
 	// Create a file that will store the rendition
 	// const file = await folder.createFile(fileName, { overwrite: true });
-	anotherFile.write("Hello, world!");
+	anotherFile.write(xmlText);
 
 	// Create options for rendering a PNG.
 	// Other file formats have different required options.
@@ -163,23 +163,8 @@ function create() {
 		});
 
 	panel.querySelector("#btnCopyXMLText").addEventListener("click", async () => {
-		// 복사할 텍스트를 가져옴
 		const textarea = panel.querySelector("#taExport");
-		const textToCopy = textarea.value;
-
-		await exportRendition();
-
-		// 텍스트를 클립보드에 복사
-		// 클립보드를 허용하지 않았다 .....
-		//navigator.clipboard
-		//  .writeText(textToCopy)
-		//  .then(function () {
-		//    console.log('텍스트가 클립보드에 복사되었습니다.');
-		//  })
-		//  .catch(function (error) {
-		//    console.error('클립보드 복사 실패:', error);
-		//  });
-		//console.log('텍스트가 클립보드에 복사되었습니다.');
+		await exportRendition(textarea.value);
 	});
 
 	panel.querySelector("#btnConvert").addEventListener("click", async (e) => {
