@@ -5,6 +5,7 @@ module.exports = {
     path: __dirname,
     filename: 'main.js',
     libraryTarget: 'commonjs2',
+    publicPath: 'resource/',
   },
   devtool: 'none',
   externals: {

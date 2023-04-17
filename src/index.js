@@ -1,8 +1,10 @@
 const { Configuration, OpenAIApi } = require('openai');
 const { Rectangle, Color } = require('scenegraph');
+const { resolve } = require('../webpack.config');
 const fs = require('uxp').storage.localFileSystem;
 
 let panel;
+let myApiKey = '내 api키';
 let fileName = 'XD_PlUGIN_WEBSQUARE.xml';
 let defaultPrompt = `
 당신은 프론트엔드 프로그래머입니다.
@@ -20,11 +22,16 @@ let defaultPrompt = `
 * <svg>  하위의  <path> 가 있을 경우에는 삭제 
 *  id와 class 속성에 'n_"로 시작하는 경우, 모두 빈 값으로 설정
 *  srcset 속성명은 src로 변경 
+* <a>는 <w2:anchor>으로 변환하고, outerDiv 속성에 "false"를 추가
+* <img>는 <xf:image>으로 변환하고, src 속성에 ""를 추가
+* <input>는 <xf:input>으로 변환하고, adjustMaxLength 속성에 "false"를 추가
+* <select>는 <xf:select1>으로 변환하고, submenuSize="auto", ref="", appearance="minimal", disabledClass="w2selectbox_disabled", chooseOption="", disabled="false", renderType="select", direction="auto" 속성들 추가
+* <span>는 <w2:span>으로 변환하고, label 속성에 "Insert Text"를 추가
+* <textarea>는 <xf:textarea>으로 변환
 
 소스는 다음과 같습니다.
 `;
 let applyPrompt = '';
-
 const systemPrompt = '';
 
 // 네모 생성 테스트
@@ -43,9 +50,10 @@ function rectangleHandlerFunction(selection) {
 
 // openAi test
 async function testOpenAi(prompt) {
+  let errorMsg = '';
   const configuration = new Configuration({
     //apiKey: process.env.OPENAI_API_KEY,
-    apiKey: '내 api키', // 해당 방법으로 사용하는 이유는 환경변수에 설정된 OPENAI_API_KEY를 adobe xd플러그인이 못들고오는 듯 함
+    apiKey: myApiKey, // 해당 방법으로 사용하는 이유는 환경변수에 설정된 OPENAI_API_KEY를 adobe xd플러그인이 못들고오는 듯 함
   });
   const openai = new OpenAIApi(configuration);
 
@@ -67,10 +75,18 @@ async function testOpenAi(prompt) {
     { role: 'system', content: systemPrompt },
   ];
 
-  const response = await openai.createChatCompletion({
-    model: 'gpt-3.5-turbo',
-    messages: message,
-  });
+  const response = await openai
+    .createChatCompletion({
+      model: 'gpt-3.5-turbo',
+      messages: message,
+    })
+    .catch((error) => {
+      errorMsg = error.message;
+    });
+
+  if (errorMsg !== '') {
+    return errorMsg;
+  }
 
   console.log('- completion:\n' + response.data.choices[0].message.content);
   console.log('\n- total tokens: ' + response.data.usage.total_tokens);
@@ -105,30 +121,6 @@ async function exportRendition(xmlText) {
   // Create a file that will store the rendition
   // const file = await folder.createFile(fileName, { overwrite: true });
   anotherFile.write(xmlText);
-
-  // Create options for rendering a PNG.
-  // Other file formats have different required options.
-  // See `application#createRenditions` docs for details.
-  // const renditionOptions = [
-  //   {
-  //     node: selection.items[0],
-  //     outputFile: file,
-  //     type: 'xml',
-  //     scale: 2,
-  //   },
-  // ];
-
-  // try {
-  //   // Create the rendition(s)
-  //   const results = await application.createRenditions(renditionOptions);
-
-  //   // Create and show a modal dialog displaying info about the results
-  //   const dialog = createDialog(results[0].outputFile.nativePath);
-  //   return dialog.showModal();
-  // } catch (err) {
-  //   // Exit if there's an error rendering.
-  //   return console.log('Something went wrong. Let the user know.');
-  // }
 }
 
 function create() {
@@ -148,6 +140,16 @@ function create() {
     padding-top: 10px;
     padding-bottom: 10px;
   }
+  .disable_btn {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  .loading {
+    background-image: url(../resource/loading.gif);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+  }
 </style>
 <form method="dialog" id="main">
   <button id="btnOpenFileDialog" uxp-variant="cta">파일 열기</button>
@@ -155,7 +157,9 @@ function create() {
     <label>프롬프트</label>
     <textarea id="taPrompt"></textarea>
   </div>
-  <button id="btnConvert" uxp-variant="cta">ConvertToWebSquare</button>
+  <div id="convert">
+    <button id="btnConvert" uxp-variant="cta">ConvertToWebSquare</button>
+  </div>
   <div class="export">
     <label>결과</label>
     <textarea id="taExport"></textarea>
@@ -179,11 +183,21 @@ function create() {
   });
 
   panel.querySelector('#btnConvert').addEventListener('click', async (e) => {
-    //panel.querySelector('#btnConvert').disabled();
-    const taPrompt = panel.querySelector('#taPrompt');
-    const contents = await testOpenAi(taPrompt.value);
-    panel.querySelector('#taExport').value = contents;
-    //panel.querySelector('#btnConvert').enabled();
+    const target = e.target;
+    if (!target.classList.contains('disable_btn')) {
+      const gifTag = document.querySelector('#convert');
+      gifTag.classList.add('loading');
+      target.classList.add('disable_btn');
+      const taPrompt = panel.querySelector('#taPrompt');
+      const contents = await testOpenAi(taPrompt.value);
+      panel.querySelector('#taExport').value = contents;
+      target.classList.remove('disable_btn');
+      gifTag.classList.remove('loading');
+      const wait = function (time) {
+        return new Promise((resolve) => setTimeout(resolve, time));
+      };
+      await wait(300);
+    }
   });
 
   return panel;

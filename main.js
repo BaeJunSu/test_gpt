@@ -78,7 +78,7 @@ module.exports =
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
+/******/ 	__webpack_require__.p = "resource/";
 /******/
 /******/
 /******/ 	// Load entry module and return exports
@@ -4905,10 +4905,13 @@ var _require = __webpack_require__(/*! openai */ "./node_modules/openai/dist/ind
 var _require2 = __webpack_require__(/*! scenegraph */ "scenegraph"),
   Rectangle = _require2.Rectangle,
   Color = _require2.Color;
+var _require3 = __webpack_require__(/*! ../webpack.config */ "./webpack.config.js"),
+  resolve = _require3.resolve;
 var fs = __webpack_require__(/*! uxp */ "uxp").storage.localFileSystem;
 var panel;
+var myApiKey = '내 api키';
 var fileName = 'XD_PlUGIN_WEBSQUARE.xml';
-var defaultPrompt = "\n\uB2F9\uC2E0\uC740 \uD504\uB860\uD2B8\uC5D4\uB4DC \uD504\uB85C\uADF8\uB798\uBA38\uC785\uB2C8\uB2E4.\n\uC6F9\uC2A4\uD018\uC5B4 xml\uC740 xforms \uD45C\uC900\uC744 \uD655\uC7A5\uD558\uC5EC \uB9CC\uB4E4\uC5B4\uC9C4 xml\uC785\uB2C8\uB2E4.\n\uADDC\uCE59\uC740 \uB2E4\uC74C\uACFC \uAC19\uC2B5\uB2C8\uB2E4.\n\uB2F9\uC2E0\uC740 html \uD398\uC774\uC9C0\uB97C \uC6F9\uC2A4\uD018\uC5B4 xml\uB85C \uC804\uD658\uD558\uB294 \uC791\uC5C5 \uC218\uD589\uD558\uC5EC\uC57C \uD569\uB2C8\uB2E4.\n\n* <ul>\uB294 <xf:group>\uC73C\uB85C \uBCC0\uD658\uD558\uACE0, tagname \uC18D\uC131\uC5D0  ul\uC744 \uCD94\uAC00\n* <li>\uB294 <xf:group>\uC73C\uB85C \uBCC0\uD658\uD558\uACE0, tagname \uC18D\uC131\uC5D0  li\uC744 \uCD94\uAC00\n* <div>\uB294 <xf:group>\uB85C \uBCC0\uD658\n* <span>\uC740 <w2:span>\uB85C \uBCC0\uD658\n* <svg>\uC740  <xf:image>\uB85C \uBCC0\uD658\n* <svg> \uC18D\uC131 \uC911  viewBox\uC18D\uC131\uC740 \uC0AD\uC81C \n* viewBox\uC758 4\uC790\uB9AC \uC22B\uC790\uC911\uC5D0 \uB4A4\uC5D0 2 \uC22B\uC790\uB97C \uC368\uC11C, inline style \uC981  width,height \uAC12\uC73C\uB85C \uC815\uC758\uD558\uBA70 \uB2E8\uC704\uB294 px\uB85C \uC9C0\uC815.\n* <svg>  \uD558\uC704\uC758  <path> \uAC00 \uC788\uC744 \uACBD\uC6B0\uC5D0\uB294 \uC0AD\uC81C \n*  id\uC640 class \uC18D\uC131\uC5D0 'n_\"\uB85C \uC2DC\uC791\uD558\uB294 \uACBD\uC6B0, \uBAA8\uB450 \uBE48 \uAC12\uC73C\uB85C \uC124\uC815\n*  srcset \uC18D\uC131\uBA85\uC740 src\uB85C \uBCC0\uACBD \n\n\uC18C\uC2A4\uB294 \uB2E4\uC74C\uACFC \uAC19\uC2B5\uB2C8\uB2E4.\n";
+var defaultPrompt = "\n\uB2F9\uC2E0\uC740 \uD504\uB860\uD2B8\uC5D4\uB4DC \uD504\uB85C\uADF8\uB798\uBA38\uC785\uB2C8\uB2E4.\n\uC6F9\uC2A4\uD018\uC5B4 xml\uC740 xforms \uD45C\uC900\uC744 \uD655\uC7A5\uD558\uC5EC \uB9CC\uB4E4\uC5B4\uC9C4 xml\uC785\uB2C8\uB2E4.\n\uADDC\uCE59\uC740 \uB2E4\uC74C\uACFC \uAC19\uC2B5\uB2C8\uB2E4.\n\uB2F9\uC2E0\uC740 html \uD398\uC774\uC9C0\uB97C \uC6F9\uC2A4\uD018\uC5B4 xml\uB85C \uC804\uD658\uD558\uB294 \uC791\uC5C5 \uC218\uD589\uD558\uC5EC\uC57C \uD569\uB2C8\uB2E4.\n\n* <ul>\uB294 <xf:group>\uC73C\uB85C \uBCC0\uD658\uD558\uACE0, tagname \uC18D\uC131\uC5D0  ul\uC744 \uCD94\uAC00\n* <li>\uB294 <xf:group>\uC73C\uB85C \uBCC0\uD658\uD558\uACE0, tagname \uC18D\uC131\uC5D0  li\uC744 \uCD94\uAC00\n* <div>\uB294 <xf:group>\uB85C \uBCC0\uD658\n* <span>\uC740 <w2:span>\uB85C \uBCC0\uD658\n* <svg>\uC740  <xf:image>\uB85C \uBCC0\uD658\n* <svg> \uC18D\uC131 \uC911  viewBox\uC18D\uC131\uC740 \uC0AD\uC81C \n* viewBox\uC758 4\uC790\uB9AC \uC22B\uC790\uC911\uC5D0 \uB4A4\uC5D0 2 \uC22B\uC790\uB97C \uC368\uC11C, inline style \uC981  width,height \uAC12\uC73C\uB85C \uC815\uC758\uD558\uBA70 \uB2E8\uC704\uB294 px\uB85C \uC9C0\uC815.\n* <svg>  \uD558\uC704\uC758  <path> \uAC00 \uC788\uC744 \uACBD\uC6B0\uC5D0\uB294 \uC0AD\uC81C \n*  id\uC640 class \uC18D\uC131\uC5D0 'n_\"\uB85C \uC2DC\uC791\uD558\uB294 \uACBD\uC6B0, \uBAA8\uB450 \uBE48 \uAC12\uC73C\uB85C \uC124\uC815\n*  srcset \uC18D\uC131\uBA85\uC740 src\uB85C \uBCC0\uACBD \n* <a>\uB294 <w2:anchor>\uC73C\uB85C \uBCC0\uD658\uD558\uACE0, outerDiv \uC18D\uC131\uC5D0 \"false\"\uB97C \uCD94\uAC00\n* <img>\uB294 <xf:image>\uC73C\uB85C \uBCC0\uD658\uD558\uACE0, src \uC18D\uC131\uC5D0 \"\"\uB97C \uCD94\uAC00\n* <input>\uB294 <xf:input>\uC73C\uB85C \uBCC0\uD658\uD558\uACE0, adjustMaxLength \uC18D\uC131\uC5D0 \"false\"\uB97C \uCD94\uAC00\n* <select>\uB294 <xf:select1>\uC73C\uB85C \uBCC0\uD658\uD558\uACE0, submenuSize=\"auto\", ref=\"\", appearance=\"minimal\", disabledClass=\"w2selectbox_disabled\", chooseOption=\"\", disabled=\"false\", renderType=\"select\", direction=\"auto\" \uC18D\uC131\uB4E4 \uCD94\uAC00\n* <span>\uB294 <w2:span>\uC73C\uB85C \uBCC0\uD658\uD558\uACE0, label \uC18D\uC131\uC5D0 \"Insert Text\"\uB97C \uCD94\uAC00\n* <textarea>\uB294 <xf:textarea>\uC73C\uB85C \uBCC0\uD658\n\n\uC18C\uC2A4\uB294 \uB2E4\uC74C\uACFC \uAC19\uC2B5\uB2C8\uB2E4.\n";
 var applyPrompt = '';
 var systemPrompt = '';
 
@@ -4931,13 +4934,14 @@ function testOpenAi(_x) {
 } // 파일 읽기 테스트
 function _testOpenAi() {
   _testOpenAi = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(prompt) {
-    var configuration, openai, message, response;
+    var errorMsg, configuration, openai, message, response;
     return _regeneratorRuntime().wrap(function _callee4$(_context4) {
       while (1) switch (_context4.prev = _context4.next) {
         case 0:
+          errorMsg = '';
           configuration = new Configuration({
             //apiKey: process.env.OPENAI_API_KEY,
-            apiKey: '내 api키' // 해당 방법으로 사용하는 이유는 환경변수에 설정된 OPENAI_API_KEY를 adobe xd플러그인이 못들고오는 듯 함
+            apiKey: myApiKey // 해당 방법으로 사용하는 이유는 환경변수에 설정된 OPENAI_API_KEY를 adobe xd플러그인이 못들고오는 듯 함
           });
           openai = new OpenAIApi(configuration); //const response = await openai
           //  .createCompletion({
@@ -4958,18 +4962,26 @@ function _testOpenAi() {
             role: 'system',
             content: systemPrompt
           }];
-          _context4.next = 5;
+          _context4.next = 6;
           return openai.createChatCompletion({
             model: 'gpt-3.5-turbo',
             messages: message
+          })["catch"](function (error) {
+            errorMsg = error.message;
           });
-        case 5:
+        case 6:
           response = _context4.sent;
+          if (!(errorMsg !== '')) {
+            _context4.next = 9;
+            break;
+          }
+          return _context4.abrupt("return", errorMsg);
+        case 9:
           console.log('- completion:\n' + response.data.choices[0].message.content);
           console.log('\n- total tokens: ' + response.data.usage.total_tokens);
           console.log('*- completion ended...');
           return _context4.abrupt("return", response.data.choices[0].message.content);
-        case 10:
+        case 13:
         case "end":
           return _context4.stop();
       }
@@ -5041,30 +5053,6 @@ function _exportRendition() {
           // Create a file that will store the rendition
           // const file = await folder.createFile(fileName, { overwrite: true });
           anotherFile.write(xmlText);
-
-          // Create options for rendering a PNG.
-          // Other file formats have different required options.
-          // See `application#createRenditions` docs for details.
-          // const renditionOptions = [
-          //   {
-          //     node: selection.items[0],
-          //     outputFile: file,
-          //     type: 'xml',
-          //     scale: 2,
-          //   },
-          // ];
-
-          // try {
-          //   // Create the rendition(s)
-          //   const results = await application.createRenditions(renditionOptions);
-
-          //   // Create and show a modal dialog displaying info about the results
-          //   const dialog = createDialog(results[0].outputFile.nativePath);
-          //   return dialog.showModal();
-          // } catch (err) {
-          //   // Exit if there's an error rendering.
-          //   return console.log('Something went wrong. Let the user know.');
-          // }
         case 9:
         case "end":
           return _context6.stop();
@@ -5074,7 +5062,7 @@ function _exportRendition() {
   return _exportRendition.apply(this, arguments);
 }
 function create() {
-  var HTML = "\n<style>\n  textarea {\n    resize: none; /* resize \uAE30\uB2A5 \uBE44\uD65C\uC131\uD654 */\n    width: 100%; /* \uAC00\uB85C \uD06C\uAE30 */\n    height: 200px; /* \uC138\uB85C \uD06C\uAE30 */\n    padding: 0px;\n    margin: 0px;\n  }\n  .prompt {\n    padding-top: 10px;\n  }\n  .export {\n    padding-top: 10px;\n    padding-bottom: 10px;\n  }\n</style>\n<form method=\"dialog\" id=\"main\">\n  <button id=\"btnOpenFileDialog\" uxp-variant=\"cta\">\uD30C\uC77C \uC5F4\uAE30</button>\n  <div class=\"prompt\">\n    <label>\uD504\uB86C\uD504\uD2B8</label>\n    <textarea id=\"taPrompt\"></textarea>\n  </div>\n  <button id=\"btnConvert\" uxp-variant=\"cta\">ConvertToWebSquare</button>\n  <div class=\"export\">\n    <label>\uACB0\uACFC</label>\n    <textarea id=\"taExport\"></textarea>\n  </div>\n  <button id=\"btnCopyXMLText\" uxp-variant=\"cta\">\uD30C\uC77C \uC800\uC7A5</button>\n</form>\n";
+  var HTML = "\n<style>\n  textarea {\n    resize: none; /* resize \uAE30\uB2A5 \uBE44\uD65C\uC131\uD654 */\n    width: 100%; /* \uAC00\uB85C \uD06C\uAE30 */\n    height: 200px; /* \uC138\uB85C \uD06C\uAE30 */\n    padding: 0px;\n    margin: 0px;\n  }\n  .prompt {\n    padding-top: 10px;\n  }\n  .export {\n    padding-top: 10px;\n    padding-bottom: 10px;\n  }\n  .disable_btn {\n    opacity: 0.3;\n    pointer-events: none;\n  }\n  .loading {\n    background-image: url(../resource/loading.gif);\n    background-repeat: no-repeat;\n    background-attachment: fixed;\n    background-position: center;\n  }\n</style>\n<form method=\"dialog\" id=\"main\">\n  <button id=\"btnOpenFileDialog\" uxp-variant=\"cta\">\uD30C\uC77C \uC5F4\uAE30</button>\n  <div class=\"prompt\">\n    <label>\uD504\uB86C\uD504\uD2B8</label>\n    <textarea id=\"taPrompt\"></textarea>\n  </div>\n  <div id=\"convert\">\n    <button id=\"btnConvert\" uxp-variant=\"cta\">ConvertToWebSquare</button>\n  </div>\n  <div class=\"export\">\n    <label>\uACB0\uACFC</label>\n    <textarea id=\"taExport\"></textarea>\n  </div>\n  <button id=\"btnCopyXMLText\" uxp-variant=\"cta\">\uD30C\uC77C \uC800\uC7A5</button>\n</form>\n";
   panel = document.createElement('div');
   panel.innerHTML = HTML;
   panel.querySelector('#btnOpenFileDialog').addEventListener('click', /*#__PURE__*/function () {
@@ -5115,19 +5103,34 @@ function create() {
   })));
   panel.querySelector('#btnConvert').addEventListener('click', /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(e) {
-      var taPrompt, contents;
+      var target, gifTag, taPrompt, contents, wait;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
-            //panel.querySelector('#btnConvert').disabled();
+            target = e.target;
+            if (target.classList.contains('disable_btn')) {
+              _context3.next = 15;
+              break;
+            }
+            gifTag = document.querySelector('#convert');
+            gifTag.classList.add('loading');
+            target.classList.add('disable_btn');
             taPrompt = panel.querySelector('#taPrompt');
-            _context3.next = 3;
+            _context3.next = 8;
             return testOpenAi(taPrompt.value);
-          case 3:
+          case 8:
             contents = _context3.sent;
             panel.querySelector('#taExport').value = contents;
-            //panel.querySelector('#btnConvert').enabled();
-          case 5:
+            target.classList.remove('disable_btn');
+            gifTag.classList.remove('loading');
+            wait = function wait(time) {
+              return new Promise(function (resolve) {
+                return setTimeout(resolve, time);
+              });
+            };
+            _context3.next = 15;
+            return wait(300);
+          case 15:
           case "end":
             return _context3.stop();
         }
@@ -5162,6 +5165,47 @@ module.exports = {
     }
   }
 };
+
+/***/ }),
+
+/***/ "./webpack.config.js":
+/*!***************************!*\
+  !*** ./webpack.config.js ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* WEBPACK VAR INJECTION */(function(__dirname) {module.exports = {
+  mode: 'development',
+  entry: './src/index.js',
+  output: {
+    path: __dirname,
+    filename: 'main.js',
+    libraryTarget: 'commonjs2',
+    publicPath: 'resource/'
+  },
+  devtool: 'none',
+  externals: {
+    uxp: 'uxp',
+    os: 'os',
+    scenegraph: 'scenegraph',
+    application: 'application'
+  },
+  resolve: {
+    extensions: ['.js']
+  },
+  module: {
+    rules: [{
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: 'babel-loader'
+    }, {
+      test: /\.css$/,
+      use: ['style-loader', 'css-loader']
+    }]
+  }
+};
+/* WEBPACK VAR INJECTION */}.call(this, "/"))
 
 /***/ }),
 

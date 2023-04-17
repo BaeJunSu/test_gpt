@@ -1,0 +1,7 @@
+* <a>는 <w2:anchor>으로 변환하고, outerDiv 속성에 "false"를 추가
+* <img>는 <xf:image>으로 변환하고, src 속성에 ""를 추가
+* <input>는 <xf:input>으로 변환하고, adjustMaxLength 속성에 "false"를 추가
+* <select>는 <xf:select1>으로 변환하고, submenuSize="auto", ref="", appearance="minimal", disabledClass="w2selectbox_disabled", chooseOption="", disabled="false", renderType="select", direction="auto" 속성들 추가
+* <span>는 <w2:span>으로 변환하고, label 속성에 "Insert Text"를 추가
+* <textarea>는 <xf:textarea>으로 변환
+
