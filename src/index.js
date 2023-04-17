@@ -1,6 +1,5 @@
 const { Configuration, OpenAIApi } = require('openai');
 const { Rectangle, Color } = require('scenegraph');
-const { resolve } = require('../webpack.config');
 const fs = require('uxp').storage.localFileSystem;
 
 let panel;

@@ -4905,8 +4905,6 @@ var _require = __webpack_require__(/*! openai */ "./node_modules/openai/dist/ind
 var _require2 = __webpack_require__(/*! scenegraph */ "scenegraph"),
   Rectangle = _require2.Rectangle,
   Color = _require2.Color;
-var _require3 = __webpack_require__(/*! ../webpack.config */ "./webpack.config.js"),
-  resolve = _require3.resolve;
 var fs = __webpack_require__(/*! uxp */ "uxp").storage.localFileSystem;
 var panel;
 var myApiKey = '내 api키';
@@ -5165,47 +5163,6 @@ module.exports = {
     }
   }
 };
-
-/***/ }),
-
-/***/ "./webpack.config.js":
-/*!***************************!*\
-  !*** ./webpack.config.js ***!
-  \***************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/* WEBPACK VAR INJECTION */(function(__dirname) {module.exports = {
-  mode: 'development',
-  entry: './src/index.js',
-  output: {
-    path: __dirname,
-    filename: 'main.js',
-    libraryTarget: 'commonjs2',
-    publicPath: 'resource/'
-  },
-  devtool: 'none',
-  externals: {
-    uxp: 'uxp',
-    os: 'os',
-    scenegraph: 'scenegraph',
-    application: 'application'
-  },
-  resolve: {
-    extensions: ['.js']
-  },
-  module: {
-    rules: [{
-      test: /\.js$/,
-      exclude: /node_modules/,
-      use: 'babel-loader'
-    }, {
-      test: /\.css$/,
-      use: ['style-loader', 'css-loader']
-    }]
-  }
-};
-/* WEBPACK VAR INJECTION */}.call(this, "/"))
 
 /***/ }),
 
