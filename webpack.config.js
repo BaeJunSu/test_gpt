@@ -1,10 +1,10 @@
 module.exports = {
-  mode: 'development',
-  entry: './src/index.js',
+  mode: 'production',
+  entry: './src/index_wq.js',
   output: {
     path: __dirname,
     filename: 'main.js',
-    libraryTarget: 'commonjs2',
+    libraryTarget: 'umd', //'commonjs2',
     publicPath: 'resource/',
   },
   devtool: 'none',
@@ -27,6 +27,10 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.txt$/,
+        use: 'raw-loader',
       },
     ],
   },
