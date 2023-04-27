@@ -50,7 +50,7 @@ wq_gpt.aplayOpenAi = async (prompt, myApiKey, customPrompt) => {
   return response.data.choices[0].message.content;
 };
 
-wq_gpt.convertCss = (cssfile) => {
+wq_gpt.convertCss = (cssfile, customPrompt = "") => {
   // parse CSS to AST
   let flag = false;
   const ast = csstree.parse(cssfile);
@@ -63,15 +63,27 @@ wq_gpt.convertCss = (cssfile) => {
     } else if (node.type === 'TypeSelector' && node.name === '*' && list) {
       flag = true;
     }
-
+  
     if (node.type === 'Declaration' && flag) {
       list.remove(item);
     }
-
+  
     if (node.type === 'Selector') {
       flag = false;
     }
-
+  });
+  
+  csstree.walk(ast, (node, item, list) => {
+    if (node.type === 'ClassSelector' && node.name === 'mediaViewInfo' && list) {
+      flag = true;
+    } else if (node.type === 'PseudoClassSelector' && node.name === 'root' && list) {
+      flag = true;
+    }
+  
+    if (node.type === 'Selector') {
+      flag = false;
+    }
+  
     if (node.type === 'Rule' && flag) {
       list.remove(item);
     }
@@ -79,7 +91,7 @@ wq_gpt.convertCss = (cssfile) => {
 
   let newCssCode = csstree.generate(ast);
 
-  newCssCode = `${defaultPrompt}\n` + '```\n' + `${newCssCode}` + '\n```';
+  newCssCode = `${customPrompt !== '' ? customPrompt : defaultPrompt}\n` + `${newCssCode}` + '\n';
   console.log(newCssCode);
   return newCssCode;
 };

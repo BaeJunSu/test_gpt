@@ -164,6 +164,18 @@ csstree.walk(ast, (node, item, list) => {
   if (node.type === 'Selector') {
     flag = false;
   }
+});
+
+csstree.walk(ast, (node, item, list) => {
+  if (node.type === 'ClassSelector' && node.name === 'mediaViewInfo' && list) {
+    flag = true;
+  } else if (node.type === 'PseudoClassSelector' && node.name === 'root' && list) {
+    flag = true;
+  }
+
+  if (node.type === 'Selector') {
+    flag = false;
+  }
 
   if (node.type === 'Rule' && flag) {
     list.remove(item);

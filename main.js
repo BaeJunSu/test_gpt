@@ -17898,6 +17898,7 @@ wq_gpt.aplayOpenAi = /*#__PURE__*/function () {
   };
 }();
 wq_gpt.convertCss = function (cssfile) {
+  var customPrompt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
   // parse CSS to AST
   var flag = false;
   var ast = css_tree__WEBPACK_IMPORTED_MODULE_1__["parse"](cssfile);
@@ -17916,12 +17917,22 @@ wq_gpt.convertCss = function (cssfile) {
     if (node.type === 'Selector') {
       flag = false;
     }
+  });
+  css_tree__WEBPACK_IMPORTED_MODULE_1__["walk"](ast, function (node, item, list) {
+    if (node.type === 'ClassSelector' && node.name === 'mediaViewInfo' && list) {
+      flag = true;
+    } else if (node.type === 'PseudoClassSelector' && node.name === 'root' && list) {
+      flag = true;
+    }
+    if (node.type === 'Selector') {
+      flag = false;
+    }
     if (node.type === 'Rule' && flag) {
       list.remove(item);
     }
   });
   var newCssCode = css_tree__WEBPACK_IMPORTED_MODULE_1__["generate"](ast);
-  newCssCode = "".concat(defaultPrompt, "\n") + '```\n' + "".concat(newCssCode) + '\n```';
+  newCssCode = "".concat(customPrompt !== '' ? customPrompt : defaultPrompt, "\n") + "".concat(newCssCode) + '\n';
   console.log(newCssCode);
   return newCssCode;
 };
